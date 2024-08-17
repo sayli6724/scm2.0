@@ -1,14 +1,18 @@
 package com.scm.services.impl;
 
-import java.util.*;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.User;
+import com.scm.helpers.AppConstants;
 import com.scm.helpers.ResourceNotFoundException;
 import com.scm.repositories.UserRepo;
 import com.scm.services.UserService;
@@ -17,17 +21,31 @@ import com.scm.services.UserService;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
     
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 
     @Override
-    public User saveUser(User user) { 
+    public User saveUser(User user1) { 
+        User user = new User();
+        BeanUtils.copyProperties(user1, user);
         //user id : to be generate
-        String userId = UUID.randomUUID().toString(); 
+        String userId = UUID.randomUUID().toString();
+         
         user.setUserId(userId);
         //pasword encode
         //user.setPassword(userId);
+        user.setPassword(passwordEncoder.encode(user1.getPassword()));
+
+        //set user role
+      
+        user.setRoleList(List.of(AppConstants.ROLE_USER));
+
+        logger.info(user.getProvider().toString());
+
         return userRepo.save(user);
     }
 
@@ -46,7 +64,7 @@ public class UserServiceImpl implements UserService {
         user2.setPassword(user.getPassword());
         user2.setAbout(user.getAbout());
         user2.setPhoneNumber(user.getPhoneNumber());
-        user2.setProfilePicture(user.getProfilePicture());
+        user2.setProfilePic(user.getProfilePic());
         user2.setEnabled(user.isEnabled());
         user2.setEmailVerified(user.isEmailVerified());
         user2.setPhoneVerified(user.isPhoneVerified());
@@ -81,7 +99,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
     }
 

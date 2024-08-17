@@ -2,6 +2,7 @@ package com.scm.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.scm.helpers.MessageType;
 import com.scm.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -81,13 +83,16 @@ public class PageController
     //called register
  
     @RequestMapping(value="/do-register",method=RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm, HttpSession session) 
+    public String processRegister(@Valid @ModelAttribute UserForm userForm,BindingResult rBindingResult, HttpSession session) 
     {
         System.out.println("Processing registration...");
         //fetch form data
         //userform
         System.out.println(userForm);
         //validate form data
+        if(rBindingResult.hasErrors()){
+            return "register";
+        }
         //save user data to database
         
         //userservice
@@ -108,7 +113,7 @@ public class PageController
         user.setPassword(userForm.getPassword());
         user.setAbout(userForm.getAbout());
         user.setPhoneNumber(userForm.getPhoneNumber());
-        user.setProfilePicture("C:\\Users\\Sayli\\Downloads\\vecteezy_user-profile-icon-profile-avatar-user-icon-male-icon_20911748.png");
+        user.setProfilePic("C:\\Users\\Sayli\\Downloads\\vecteezy_user-profile-icon-profile-avatar-user-icon-male-icon_20911748.png");
         
 
         User savedUser = userService.saveUser(user);

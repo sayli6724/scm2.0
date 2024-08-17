@@ -19,7 +19,7 @@
             
             <!-- message here -->
 
-            <div th:replace="message::messagebox"></div>
+            <div th:replace="message::message"></div>
 
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Signup Here</h5>
             <p class="font-normal text-gray-400 dark:text-gray-400">Start managing contacts on cloud..</p>
@@ -30,7 +30,8 @@
             data-th-action="@{'/do-register'}" 
             method="post"
             th:object="${userForm}"
-            class="mt-5">
+            class="mt-5"
+            novalidate>
 
               <!--name-->
 
@@ -44,6 +45,12 @@
                 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter here" required />
               </div>
 
+              <p 
+              th:if="${#fields.hasErrors('name')}"
+              th:errors="*{name}"
+              class="text-red-600 px-1 py-1">
+              Name is required</p>
+
                 <!--email field-->
 
                 <div class="mb-3">
@@ -55,6 +62,13 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                   focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                   dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@gmail.com" required />
+
+                  <p 
+                  th:if="${#fields.hasErrors('email')}"
+                  th:errors="*{email}"
+                  class="text-red-600 px-1 py-1">
+                  </p>  
+
                 </div>
 
                 <!--password field-->
@@ -68,6 +82,12 @@
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                   focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
                   dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                
+                  <p 
+                  th:if="${#fields.hasErrors('password')}"
+                  th:errors="*{password}"
+                  class="text-red-600 px-1 py-1">
+                  </p>
                 </div>
 
                 <!--phone number-->
@@ -79,6 +99,12 @@
                   id="phone" 
                   th:field="*{phoneNumber}" 
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+                
+                  <p 
+                  th:if="${#fields.hasErrors('phoneNumber')}"
+                  th:errors="*{phoneNumber}"
+                  class="text-red-600 px-1 py-1">
+                  </p>
                 </div>
 
                 <!--about-->
@@ -88,7 +114,13 @@
                 <textarea
                 th:field="*{about}"  
                 id="about" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write here..."></textarea>
-                </div>
+                
+                <p 
+                th:if="${#fields.hasErrors('about')}"
+                th:errors="*{about}"
+                class="text-red-600 px-1 py-1">
+                </p>
+              </div>
                
                 <!--button-->
 
